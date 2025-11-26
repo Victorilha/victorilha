@@ -3,7 +3,7 @@ const app = express();
 //Importar os modelos 
 import Sessao from './models/Sessao.js';
 import  Filme from './models/Filme.js';
-import ingresso from './models/Ingresso.js';
+import Ingresso from './models/Ingresso.js';
 import Cliente from './models/Cliente.js';
 
 //Confiram se tem essa linha aqui também
@@ -33,6 +33,16 @@ app.get('/Filme/lst', async (req, res) => {
 
 app.get('/Filme/add', (req, res) => {
     res.render("Filme/add")
+})
+
+app.get('/Filme/edt/:id', async (req, res) => {
+    const filme = await Filme.findById(req.params.id)
+    res.render("Filme/edt", {filme})
+})
+
+app.post('/Filme/edt/:id', async (req, res) => {
+    await Filme.findByIdAndUpdate(req.params.id, req.body)
+    res.render("Filme/edtok")
 })
 
 app.post('/Filme/add/ok', async (req, res) => {
@@ -72,7 +82,7 @@ app.get('/sessao/del/:id', async (req, res) => {
 
 
 app.get('/ingresso/lst', async (req, res) => {
-    const ingresso = await ingresso.find()
+    const ingresso = await Ingresso.find()
     res.render("ingresso/lst", {ingresso})
 })
 
@@ -81,12 +91,12 @@ app.get('/ingresso/add', (req, res) => {
 })
 
 app.post('/ingresso/add/ok', async (req, res) => {
-    await ingresso.create (req.body)
+    await Ingresso.create (req.body)
     res.render("ingresso/addok")
 })
 
 app.get('/ingresso/del/:id', async (req, res) => {
-    await ingresso.findByIdAndDelete(req.params.id)
+    await Ingresso.findByIdAndDelete(req.params.id)
     res.redirect("/ingresso/lst")
 })
 
